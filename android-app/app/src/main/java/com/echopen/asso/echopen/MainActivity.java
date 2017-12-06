@@ -36,6 +36,12 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
     private EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter;
     private ImageView mCaptureButton;
 
+    //nouveaux boutons
+    private ImageView mPregnantWomanButton;
+    private ImageView mEndExamButton;
+    private ImageView mBatteryButton;
+    private ImageView mSelectButton;
+
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
     private final static float IMAGE_ROTATION_FACTOR = 90.f;
     /**
@@ -65,6 +71,44 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
                 mEchographyImageVisualisationPresenter.toggleFreeze();
             }
         });
+
+
+        //nouveau bouton
+        mPregnantWomanButton = (ImageView) findViewById(R.id.btnMode);
+        mPregnantWomanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Log.d("pregnantButton", "PregnantWomanButton Pressed");
+             }
+        });
+
+
+        mSelectButton = (ImageView) findViewById(R.id.btnSelect);
+        mSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Log.d("selectButton", "SelectButton Pressed");
+             }
+        });
+
+
+        mEndExamButton = (ImageView) findViewById(R.id.btnEndExam);
+        mEndExamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Log.d("endExamButton", "EndExamButton Pressed");
+             }
+        });
+
+
+        mBatteryButton = (ImageView) findViewById(R.id.btnBattery);
+        mBatteryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Log.d("batteryButton", "BatteryButton Pressed");
+             }
+        });
+
 
         mEchographyImageStreamingService.getRenderingContextController().setLinearLutSlope(RenderingContext.DEFAULT_LUT_SLOPE);
         mEchographyImageStreamingService.getRenderingContextController().setLinearLutOffset(RenderingContext.DEFAULT_LUT_OFFSET);
