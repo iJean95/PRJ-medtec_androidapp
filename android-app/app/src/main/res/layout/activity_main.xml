@@ -14,7 +14,7 @@
 
 
     <ImageButton
-        android:id="@+id/btnCapture"
+        android:id="@+id/main_capture_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="bottom|center_horizontal"
