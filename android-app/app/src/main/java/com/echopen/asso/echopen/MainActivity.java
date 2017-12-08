@@ -35,8 +35,6 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
     private EchographyImageStreamingService mEchographyImageStreamingService;
     private EchographyImageVisualisationContract.Presenter mEchographyImageVisualisationPresenter;
     private ImageView mCaptureButton;
-
-    //nouveaux boutons
     private ImageView mPregnantWomanButton;
     private ImageView mEndExamButton;
     private ImageView mBatteryButton;
@@ -64,7 +62,7 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
 
         setContentView(R.layout.activity_main);
 
-        mCaptureButton = (ImageView) findViewById(R.id.btnCapture);
+        mCaptureButton = (ImageView) findViewById(R.id.main_button_capture);
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,9 +70,7 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
             }
         });
 
-
-        //nouveau bouton
-        mPregnantWomanButton = (ImageView) findViewById(R.id.btnMode);
+        mPregnantWomanButton = (ImageView) findViewById(R.id.main_button_mode);
         mPregnantWomanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,8 +78,7 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
              }
         });
 
-
-        mSelectButton = (ImageView) findViewById(R.id.btnSelect);
+        mSelectButton = (ImageView) findViewById(R.id.main_button_select);
         mSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +86,7 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
              }
         });
 
-
-        mEndExamButton = (ImageView) findViewById(R.id.btnEndExam);
+        mEndExamButton = (ImageView) findViewById(R.id.main_button_end_exam);
         mEndExamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,8 +94,7 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
              }
         });
 
-
-        mBatteryButton = (ImageView) findViewById(R.id.btnBattery);
+        mBatteryButton = (ImageView) findViewById(R.id.main_button_battery);
         mBatteryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
