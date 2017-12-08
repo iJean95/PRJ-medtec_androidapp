@@ -14,11 +14,8 @@
 
 
     <ImageButton
-<<<<<<< HEAD
+
         android:id="@+id/main_button_capture"
-=======
-        android:id="@+id/main_capture_button"
->>>>>>> 3922f5d02febb25f39470a9744db80d8793cdd90
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="bottom|center_horizontal"
