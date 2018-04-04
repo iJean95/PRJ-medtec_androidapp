@@ -50,7 +50,7 @@ public class EchographyImageVisualisationPresenter extends EchographyImageStream
     @Override
     public void toggleFreeze() {
         if(mIsFrozen){
-            unfreeze();
+           unfreeze();
         }
         else{
             freeze();

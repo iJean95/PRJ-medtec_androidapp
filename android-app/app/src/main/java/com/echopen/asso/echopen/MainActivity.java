@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.view.MotionEvent;
+import android.view.animation.Animation;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
@@ -17,6 +20,8 @@ import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVi
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationPresenter;
 import com.echopen.asso.echopen.filters.RenderingContext;
 import com.echopen.asso.echopen.utils.Constants;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * MainActivity class handles the main screen of the app.
@@ -39,6 +44,8 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
     private ImageView mEndExamButton;
     private ImageView mBatteryButton;
     private ImageView mSelectButton;
+    private Long then;
+    private RotateAnimation rotateA;
 
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
     private final static float IMAGE_ROTATION_FACTOR = 90.f;
@@ -63,18 +70,81 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
         setContentView(R.layout.activity_main);
 
         mCaptureButton = (ImageView) findViewById(R.id.main_button_capture);
+        rotateA = new RotateAnimation(0, 360,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+               /* RotateAnimation rotate = new RotateAnimation(0, 360,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f);*/
+
+        rotateA.setDuration(5000);
+        //rotateA.setRepeatCount(Animation.INFINITE);
+
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEchographyImageVisualisationPresenter.toggleFreeze();
+                Log.d("captureButton", "Short Press");
+               // rotateA = null;
+               // mCaptureButton.setAnimation(rotateA);
+
             }
         });
+
+        mCaptureButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+
+            public boolean onTouch(View v,final MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    then = System.currentTimeMillis();
+                    // start animation
+                   // mEchographyImageVisualisationPresenter.toggleFreeze();
+                  //  v.setAnimation(rotateA);
+                    rotateA = null;
+                    rotateA = new RotateAnimation(0, 360,
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                            0.6f);
+               /* RotateAnimation rotate = new RotateAnimation(0, 360,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f);*/
+
+                    rotateA.setDuration(5000);
+                    //rotateA.setRepeatCount(Animation.INFINITE);
+
+                    v.clearAnimation();
+
+                    v.setAnimation(rotateA);
+
+
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP){
+                    if(((Long) System.currentTimeMillis() - then) > 5000){
+                        Log.d("captureButton", "Long Press");
+                        // stop animation
+
+                        return true;
+                    }
+                    else
+                    {
+                       // rotateA.cancel();
+                        //rotateA = null;
+                        rotateA.cancel();
+                        rotateA = null;
+
+                    }
+                }
+                return false;
+            }
+        });
+
+       // mCaptureButton.setImageResource(R.drawable.btn_capture_freeze);
+
 
         mPregnantWomanButton = (ImageView) findViewById(R.id.main_button_mode);
         mPregnantWomanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("pregnantButton", "PregnantWomanButton Pressed");
+;
             }
         });
 
@@ -139,12 +209,15 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
 
     @Override
     public void displayFreezeButton() {
-        mCaptureButton.setImageResource(R.drawable.btn_capture_freeze);
+      // mCaptureButton.setImageResource(R.drawable.btn_capture_freeze);
+        Log.d("", "displayfreezecalled ");
     }
 
     @Override
     public void displayUnfreezeButton() {
-        mCaptureButton.setImageResource(R.drawable.btn_capture);
+        //mCaptureButton.setImageResource(R.drawable.btn_capture);
+        Log.d("", "displayfreezenotcalled ");
+
     }
 
     @Override
@@ -152,4 +225,5 @@ public class MainActivity extends Activity implements EchographyImageVisualisati
         mEchographyImageVisualisationPresenter = iPresenter;
         mEchographyImageVisualisationPresenter.start();
     }
+
 }
