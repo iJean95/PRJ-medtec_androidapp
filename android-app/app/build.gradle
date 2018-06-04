@@ -176,4 +176,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:10.2.1'
     compile 'com.google.android.gms:play-services-auth:10.2.1'
     compile 'com.google.android.gms:play-services-gcm:10.2.1'
+
+    compile 'org.jcodec:jcodec:0.2.2'
 }

@@ -2,6 +2,7 @@ package com.echopen.asso.echopen;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -22,6 +23,16 @@ import android.widget.ImageView;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
+=======
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
@@ -30,7 +41,9 @@ import com.echopen.asso.echopen.filters.RenderingContext;
 import com.echopen.asso.echopen.utils.Constants;
 import com.echopen.asso.echopen.view.CaptureButton;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * MainActivity class handles the main screen of the app.
@@ -65,6 +78,12 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
     private ActionBarDrawerToggle mDrawerToggle;
 
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
+=======
+    public ImageView mImageToValidate;
+    public Bitmap iBitmap;
+
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
 
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
     private final static float IMAGE_ROTATION_FACTOR = 90.f;
@@ -127,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         mDrawerToggle.syncState();
 
 
+        Log.d("pathhhh", this.getFilesDir().getAbsolutePath());
 
 
 
@@ -194,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
 
     public void goToMainFragment(){
         Log.d(TAG, "GOtoMainFragment");
+        mMainFragment.stopped = Boolean.FALSE;
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         ft.replace(R.id.main_container, mMainFragment);
@@ -204,9 +225,101 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void GotoImageFragment() {
         Log.d(TAG, "GOtoImageFragment");
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
 
         ft.replace(R.id.main_container, mValidationFragment);
+=======
+
+       // iBitmap = imageCaptured;
+        mValidationFragment = ImageFragment.newInstance(imageCaptured);
+
+        ft.replace(R.id.main_container, mValidationFragment);
+
         ft.addToBackStack(null);
         ft.commit();
+
     }
+    public void GotoSequenceFragment(SequenceImage imageArray) {
+        Log.d(TAG, "GOtoImageFragment");
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        // iBitmap = imageCaptured;
+        SequenceFragment fragment = SequenceFragment.newInstance(imageArray);
+
+        ft.replace(R.id.main_container, fragment);
+
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainActivity.java
+        ft.addToBackStack(null);
+        ft.commit();
+
+    }
+
+    public void writeToFile(Bitmap data) {
+
+        FileOutputStream outputStream = null;
+
+        Date currentTime = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-hh:mm:ss");
+
+        String strDt = dateFormat.format(currentTime);
+        strDt = strDt + ".png";
+
+        FileOutputStream out = null;
+        try {
+            Log.d("try", " saving");
+
+            out = getApplicationContext().openFileOutput(strDt, Context.MODE_PRIVATE);
+           // out = new FileOutputStream(strDt );
+
+            data.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("exception", "prioblem saving");
+
+        }
+
+    }
+
+
+    public void writeSequenceToFile(SequenceImage data) {
+
+
+        FileOutputStream out = null;
+        try {
+            Log.d("try", " saving");
+
+            // out = new FileOutputStream(strDt );
+            UUID patientID = UUID.randomUUID();
+            File mydir = getApplicationContext().getDir("patient-"+patientID , Context.MODE_PRIVATE);
+            mydir.mkdirs();
+            for (Bitmap image : data.mCapturedSequence)
+            {
+                Log.d("captureseq", " saving");
+
+                Date currentTime = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-hh:mm:ss");
+                UUID imageID = UUID.randomUUID();
+
+                String strDt = dateFormat.format(currentTime);
+                strDt = strDt +imageID+ ".png";
+                File path = new File(mydir, strDt);
+                //out = getApplicationContext().openFileOutput(path.getAbsolutePath().toString(), Context.MODE_PRIVATE);
+                out = new FileOutputStream(path.getAbsolutePath().toString());
+
+                image.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                out.close();
+
+            }
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("exception", "prioblem saving");
+
+        }
+
+    }
+
 }

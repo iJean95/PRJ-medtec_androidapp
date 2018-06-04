@@ -39,7 +39,11 @@ public class Constants {
 
         public static final String CONTENT_TYPE_JSON = "application/json";
 
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/utils/Constants.java
         public static final String REDPITAYA_IP = "192.168.128.3";
+=======
+        public static final String REDPITAYA_IP = "192.168.1.123";
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/utils/Constants.java
 
         public static final int REDPITAYA_PORT = 7538;
     }

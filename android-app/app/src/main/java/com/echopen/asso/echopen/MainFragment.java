@@ -32,6 +32,8 @@ import com.echopen.asso.echopen.utils.Constants;
 import com.echopen.asso.echopen.view.CaptureButton;
 
 import java.util.ArrayList;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 
 import static com.echopen.asso.echopen.ui.AbstractActionController.findViewById;
 
@@ -118,8 +120,15 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
     private ImageView mBatteryButton;
     private ImageView mSelectButton;
     private CaptureButton mCaptureShadow;
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
     private ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
     private Boolean isRecording;
+=======
+    private SequenceImage bitmapArray  = new SequenceImage();
+    private Bitmap bitmapTest;
+    private Boolean isRecording;
+    public Boolean stopped;
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
 
 
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
@@ -145,12 +154,35 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
                 Log.d(TAG, "refreshImage");
                 ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
                 lEchOpenImage.setRotation(IMAGE_ROTATION_FACTOR);
                 lEchOpenImage.setScaleX(IMAGE_ZOOM_FACTOR);
                 lEchOpenImage.setScaleY(IMAGE_ZOOM_FACTOR);
                 lEchOpenImage.setImageBitmap(iBitmap); // image affichée
+=======
+                if (         stopped == Boolean.FALSE) {
+                    if (getView()==null)
+                    {
+                        return;
+                    }
+
+                    ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
+                    lEchOpenImage.setRotation(IMAGE_ROTATION_FACTOR);
+                    lEchOpenImage.setScaleX(IMAGE_ZOOM_FACTOR);
+                    lEchOpenImage.setScaleY(IMAGE_ZOOM_FACTOR);
+                    lEchOpenImage.setImageBitmap(iBitmap); // image affichée
+                    Log.d(TAG, "refreshImage");
+
+                    bitmapTest = iBitmap;
+
+                    if (isRecording == Boolean.TRUE) {
+                        bitmapArray.mCapturedSequence.add(iBitmap);
+                    }
+                }
+
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
             }
         });
     }
@@ -193,20 +225,57 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
 
     public void longPressBegins()
     {
-        bitmapArray = new ArrayList<Bitmap>();
+        bitmapArray = new SequenceImage();
         isRecording = Boolean.TRUE;
+        stopped = Boolean.FALSE;
     }
 
     public void longPressCompleted()
     {
+        isRecording = Boolean.FALSE;
+        stopped = Boolean.TRUE;
+
         Log.d(TAG, "longPressCompleted");
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
         mEchographyImageVisualisationPresenter.captureSequenceAction();
         ((MainActivity) getActivity()).GotoImageFragment();
+=======
+      //  mEchographyImageVisualisationPresenter.captureSequenceAction();
+
+
+
+       // ((MainActivity) getActivity()).GotoImageFragment();
+        ((MainActivity) getActivity()).GotoSequenceFragment(bitmapArray);
+
+
+
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
     }
     public void longPressInterrupted()
     {
         isRecording = Boolean.FALSE;
+<<<<<<< Updated upstream:android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
         bitmapArray = new ArrayList<Bitmap>();
+=======
+        bitmapArray = new SequenceImage();
+
+        //ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
+        //Bitmap imageCaptured = ((BitmapDrawable)lEchOpenImage.getDrawable()).getBitmap();
+
+        Bitmap imageCaptured = bitmapTest;
+
+        // Bitmap imageCaptured2 = BitmapFactory.decodeFile(R.drawable.flag);
+
+       // mEchographyImageVisualisationPresenter.captureAction(imageCaptured);
+        stopped = Boolean.TRUE;
+
+
+
+        //((MainActivity) getActivity()).mValidationFragment.mImageToValidate.setImageBitmap(imageCaptured);
+//        mImageToValidate = rootView.findViewById(R.id.imageToValidate);
+       // ((MainActivity) getActivity()).mValidationFragment.mImageToValidate =
+        ((MainActivity) getActivity()).GotoImageFragment(imageCaptured);
+>>>>>>> Stashed changes:Documents/GitHub/PRJ-medtec_androidapp-protoCentraleStudents2018/android-app/app/src/main/java/com/echopen/asso/echopen/MainFragment.java
 
     }
 
