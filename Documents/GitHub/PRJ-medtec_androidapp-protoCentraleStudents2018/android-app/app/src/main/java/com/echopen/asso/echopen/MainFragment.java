@@ -23,6 +23,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
 import com.echopen.asso.echopen.echography_image_visualisation.EchographyImageVisualisationContract;
@@ -120,15 +123,14 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
     private ImageView mBatteryButton;
     private ImageView mSelectButton;
     private CaptureButton mCaptureShadow;
-    private ArrayList<Bitmap> bitmapArray = new ArrayList<Bitmap>();
     private Bitmap bitmapTest;
     private Boolean isRecording;
-    private Boolean stopped;
+    public Boolean stopped;
 
 
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
     private final static float IMAGE_ROTATION_FACTOR = 90.f;
-
+    private SequenceImage bitmapArray  = new SequenceImage();
 
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -148,6 +150,10 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
             public void run() {
                 Log.d(TAG, "refreshImage");
                 if (         stopped == Boolean.FALSE) {
+                    if (getView()==null)
+                                            {
+                                                        return;
+                                            }
                     ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
                     lEchOpenImage.setRotation(IMAGE_ROTATION_FACTOR);
                     lEchOpenImage.setScaleX(IMAGE_ZOOM_FACTOR);
@@ -158,6 +164,7 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
 
                     if (isRecording == Boolean.TRUE) {
                         //bitmapArray.add(iBitmap);
+                        bitmapArray.mCapturedSequence.add(iBitmap);
                     }
                 }
 
@@ -196,23 +203,31 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
 
     public void longPressBegins()
     {
-        bitmapArray = new ArrayList<Bitmap>();
+        bitmapArray = new SequenceImage();
+
         isRecording = Boolean.TRUE;
+        stopped = Boolean.FALSE;
     }
 
     public void longPressCompleted()
     {
-        Log.d(TAG, "longPressCompleted");
-        mEchographyImageVisualisationPresenter.captureSequenceAction();
-       // ((MainActivity) getActivity()).GotoImageFragment();
+
+        isRecording = Boolean.FALSE;
+        stopped = Boolean.TRUE;
+
+
+
+        ((MainActivity) getActivity()).GotoSequenceFragment(bitmapArray);
+
     }
     public void longPressInterrupted()
     {
         isRecording = Boolean.FALSE;
-        bitmapArray = new ArrayList<Bitmap>();
-        Log.d(TAG, "hello from shortpress");
-        //ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
-        //Bitmap imageCaptured = ((BitmapDrawable)lEchOpenImage.getDrawable()).getBitmap();
+        bitmapArray = new SequenceImage();
+
+
+
+
         Log.d(TAG, "before getting image");
         Log.d(TAG, "after getting image");
 
@@ -224,11 +239,6 @@ public class MainFragment extends Fragment implements EchographyImageVisualisati
        // mEchographyImageVisualisationPresenter.captureAction(imageCaptured);
         stopped = Boolean.TRUE;
 
-        ImageView lEchOpenImage = (ImageView) getView().findViewById(R.id.echopenImage);
-        lEchOpenImage.setRotation(IMAGE_ROTATION_FACTOR);
-        lEchOpenImage.setScaleX(IMAGE_ZOOM_FACTOR);
-        lEchOpenImage.setScaleY(IMAGE_ZOOM_FACTOR);
-        lEchOpenImage.setImageBitmap(imageCaptured); // image affichée
 
         Log.d(TAG, "aaaaaaaaaaaaaaaaaaaa");
 

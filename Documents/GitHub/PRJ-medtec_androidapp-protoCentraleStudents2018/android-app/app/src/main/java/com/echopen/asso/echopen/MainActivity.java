@@ -21,7 +21,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-
+import android.content.Context;
+import java.io.FileOutputStream;
+import java.util.UUID;
 
 import com.echopen.asso.echopen.echography_image_streaming.EchographyImageStreamingService;
 import com.echopen.asso.echopen.echography_image_streaming.modes.EchographyImageStreamingTCPMode;
@@ -32,6 +34,14 @@ import com.echopen.asso.echopen.utils.Constants;
 import com.echopen.asso.echopen.view.CaptureButton;
 
 import java.util.ArrayList;
+
+
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * MainActivity class handles the main screen of the app.
@@ -67,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     private ActionBarDrawerToggle mDrawerToggle;
 
     public ImageView mImageToValidate;
-
+    public Bitmap iBitmap;
 
     private final static float IMAGE_ZOOM_FACTOR = 1.75f;
     private final static float IMAGE_ROTATION_FACTOR = 90.f;
@@ -199,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
     public void goToMainFragment(){
         Log.d(TAG, "GOtoMainFragment");
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        mMainFragment.stopped = Boolean.FALSE;
 
         ft.replace(R.id.main_container, mMainFragment);
         ft.addToBackStack(null);
@@ -210,10 +221,13 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Log.d("az", "goto image fragment 1");
 
-        mValidationFragment.changeImage(imageCaptured);
        // mValidationFragment.mImageToValidate.setImageBitmap(imageCaptured); // image affichée
 
         Log.d("za", "goto image fragment 2");
+
+
+        mValidationFragment = ImageFragment.newInstance(imageCaptured);
+
 
       //  Fragment newFragment = this;
 
@@ -222,4 +236,88 @@ public class MainActivity extends AppCompatActivity implements  NavigationView.O
         ft.addToBackStack(null);
         ft.commit();
     }
+
+
+    public void GotoSequenceFragment(SequenceImage imageArray) {
+                Log.d(TAG, "GOtoImageFragment");
+                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+                        // iBitmap = imageCaptured;
+                                SequenceFragment fragment = SequenceFragment.newInstance(imageArray);
+
+                        ft.replace(R.id.main_container, fragment);
+
+        ft.addToBackStack(null);
+        ft.commit();
+
+                    }
+
+    public void writeToFile(Bitmap data) {
+
+        FileOutputStream outputStream = null;
+
+        Date currentTime = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-hh:mm:ss");
+
+        String strDt = dateFormat.format(currentTime);
+        strDt = strDt + ".png";
+
+        FileOutputStream out = null;
+        try {
+            Log.d("try", " saving");
+
+            out = getApplicationContext().openFileOutput(strDt, Context.MODE_PRIVATE);
+           // out = new FileOutputStream(strDt );
+
+            data.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("exception", "prioblem saving");
+
+        }
+
 }
+
+
+    public void writeSequenceToFile(SequenceImage data) {
+
+
+        FileOutputStream out = null;
+        try {
+            Log.d("try", " saving");
+
+            // out = new FileOutputStream(strDt );
+            UUID patientID = UUID.randomUUID();
+            File mydir = getApplicationContext().getDir("patient-" + patientID, Context.MODE_PRIVATE);
+            mydir.mkdirs();
+            for (Bitmap image : data.mCapturedSequence) {
+                Log.d("captureseq", " saving");
+
+                Date currentTime = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-hh:mm:ss");
+                UUID imageID = UUID.randomUUID();
+
+                String strDt = dateFormat.format(currentTime);
+                strDt = strDt + imageID + ".png";
+                File path = new File(mydir, strDt);
+                //out = getApplicationContext().openFileOutput(path.getAbsolutePath().toString(), Context.MODE_PRIVATE);
+                out = new FileOutputStream(path.getAbsolutePath().toString());
+
+                image.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                out.close();
+
+            }
+            // PNG is a lossless format, the compression factor (100) is ignored
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("exception", "prioblem saving");
+
+        }
+    }
+}
+
+
+

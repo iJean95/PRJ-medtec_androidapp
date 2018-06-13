@@ -55,6 +55,7 @@ public class EchographyImageVisualisationPresenter extends EchographyImageStream
         else{
             freeze();
         }
+
     }
 
     private void freeze(){
@@ -69,9 +70,9 @@ public class EchographyImageVisualisationPresenter extends EchographyImageStream
     @Override
     public void onEchographyImageStreamingNotification(final EchographyImageStreamingNotification iEchographyImageStreamingNotification)
     {
-        if(mIsFrozen){
+       /* if(mIsFrozen){
             return;
-        }
+        }*/
 
         mView.refreshImage(iEchographyImageStreamingNotification.getImage());
     }

@@ -33,11 +33,13 @@
         android:scaleType="fitCenter"
         android:src="@drawable/cancel" />
 
-        <ImageView
+    <ImageView
             android:id="@+id/imageToValidate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/flag" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+             />
 
 
 </FrameLayout>
